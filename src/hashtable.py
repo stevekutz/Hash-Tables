@@ -1,6 +1,6 @@
 # '''
 # Linked List hash table key/value pair
-# '''
+# '''   
 class LinkedPair:
     def __init__(self, key, value):
         self.key = key
@@ -13,8 +13,10 @@ class HashTable:
     that accepts string keys
     '''
     def __init__(self, capacity):
-        self.capacity = capacity  # Number of buckets in the hash table
-        self.storage = [None] * capacity
+        # self.count  # current number of items in dict, nice for array, not needed for LL
+        self.capacity = capacity  # (like size) Number of items in the hash table, current max length of dict
+        self.storage = [None] * capacity  # 
+
 
 
     def _hash(self, key):
@@ -50,8 +52,30 @@ class HashTable:
         Hash collisions should be handled with Linked List Chaining.
 
         Fill this in.
+        # create Linked list node if None, we are pushing Linked List kv to storage arr
+        # manage logic
         '''
-        pass
+        
+        # generate hash for index
+
+        print("\n++++++++++++++++++")
+        index = self._hash_mod(key)
+        print(" index is:", index)
+        print("value: ", value)
+        print("hash-key: ", self._hash(key))    
+        print("hash-mod: ", self._hash(key) % self.capacity)
+
+
+        # verify if new LL  self.storage[0] = None, else or add to end 
+        if self.storage[index] == None:
+            self.storage[index] = LinkedPair(key, value)
+        else:
+            if(self.storage[index].next == None):
+                print(" Collision at index: ", index)
+            orig = self.storage[index]
+            self.storage[index] = LinkedPair(key,value)
+            self.storage[index].next = orig 
+
 
 
 
@@ -74,7 +98,7 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        
 
 
     def resize(self):
@@ -84,8 +108,18 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        doubled = HashTable(self.capacity * 2)
+        # iterate into 
+        for item in self.storage:
+            if item is not None:
+                held_item = item
+                while held_item is not None:
+                    doubled.insert(held_item.key, held_item.value)
+                    held_item = held_item.next
 
+        # update attrib
+        self.capacity = doubled.capacity
+        self.storage = doubled.storage
 
 
 if __name__ == "__main__":
@@ -95,23 +129,23 @@ if __name__ == "__main__":
     ht.insert("line_2", "Filled beyond capacity")
     ht.insert("line_3", "Linked list saves the day!")
 
-    print("")
+    # print("")
 
-    # Test storing beyond capacity
-    print(ht.retrieve("line_1"))
-    print(ht.retrieve("line_2"))
-    print(ht.retrieve("line_3"))
+    # # Test storing beyond capacity
+    # print(ht.retrieve("line_1"))
+    # print(ht.retrieve("line_2"))
+    # print(ht.retrieve("line_3"))
 
     # Test resizing
-    old_capacity = len(ht.storage)
-    ht.resize()
-    new_capacity = len(ht.storage)
+    # old_capacity = len(ht.storage)
+    # ht.resize()
+    # new_capacity = len(ht.storage)
 
-    print(f"\nResized from {old_capacity} to {new_capacity}.\n")
+    # print(f"\nResized from {old_capacity} to {new_capacity}.\n")
 
-    # Test if data intact after resizing
-    print(ht.retrieve("line_1"))
-    print(ht.retrieve("line_2"))
-    print(ht.retrieve("line_3"))
+    # # Test if data intact after resizing
+    # print(ht.retrieve("line_1"))
+    # print(ht.retrieve("line_2"))
+    # print(ht.retrieve("line_3"))
 
-    print("")
+    # print("")
