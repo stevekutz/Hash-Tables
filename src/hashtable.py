@@ -34,7 +34,14 @@ class HashTable:
 
         OPTIONAL STRETCH: Research and implement DJB2
         '''
-        pass
+        # good prime number
+        salt = 5381
+
+        # letter scramble
+        for char in key:
+            hash_val = ((salt << 5) + salt) + ord(char)
+
+        return hash_val
 
 
     def _hash_mod(self, key):
@@ -43,8 +50,9 @@ class HashTable:
         within the storage capacity of the hash table.
         '''
         print("\n ******* ")
-        return self._hash(key) % self.capacity
+        # return self._hash(key) % self.capacity
 
+        return self._hash_djb2(key) % self.capacity
 
     def insert(self, key, value):
         '''
